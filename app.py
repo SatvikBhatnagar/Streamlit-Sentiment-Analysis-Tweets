@@ -38,3 +38,14 @@ if not st.sidebar.checkbox("Hide", True):
     else:
         fig = px.pie(sentiment_count, values='Tweets', names='Sentiment')
         st.plotly_chart(fig)
+
+st.sidebar.subheader("When and where are users tweeting from?")
+hour = st.sidebar.slider("Hour of day", 0, 23)
+# hour = st.sidebar.number_input("Hour of day", min_value = 0, max_value = 24)
+modified_data = data[data['tweet_created'].dt.hour == hour]
+if not st.sidebar.checkbox("Close", True, key='2'):
+    st.markdown("### Tweets locations based on the time of day")
+    st.markdown("%i tweets between %i:00 and %i:00" % (len(modified_data), hour, (hour+1)%24))
+    st.map(modified_data)
+    if st.sidebar.checkbox("show raw data", False):
+        st.write(modified_data)
